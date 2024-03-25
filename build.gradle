@@ -1,0 +1,65 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.0'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id 'com.google.cloud.tools.jib' version '3.4.1'
+	id 'pl.allegro.tech.build.axion-release' version '1.15.1'
+}
+project.version = scmVersion.version
+/*
+jib {
+	 from {
+			image = 'azul/zulu-openjdk:17-jre'
+	 }
+	to {
+		image = 'indronilc/customer-service-registry:1.0'
+		auth{
+			username = property('dockerRepoUser')
+			password = property('dockerRepoPassword')
+		}
+	}
+*/
+
+bootBuildImage {
+	imageName = 'indronilc/customer-service-registry:1.1'
+	publish = true
+
+	docker{
+		publishRegistry {
+			username = project.property('dockerRepoUser')
+			password = project.property('dockerRepoPassword')
+
+		}
+	}
+}
+
+group = 'com.abc.customer'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "2023.0.0")
+}
+
+dependencies {
+	implementation 'org.springframework.cloud:spring-cloud-starter'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
