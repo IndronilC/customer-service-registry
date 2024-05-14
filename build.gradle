@@ -2,39 +2,38 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.0'
 	id 'io.spring.dependency-management' version '1.1.4'
-	id 'com.google.cloud.tools.jib' version '3.4.1'
+	id 'com.google.cloud.tools.jib' version '3.4.2'
 	id 'pl.allegro.tech.build.axion-release' version '1.15.1'
 }
 project.version = scmVersion.version
-/*
+
 jib {
-	 from {
-			image = 'azul/zulu-openjdk:17-jre'
-	 }
+	from {
+		image = 'azul/zulu-openjdk:17-jre'
+	}
 	to {
 		image = 'indronilc/customer-service-registry:1.0'
-		auth{
+		auth {
 			username = property('dockerRepoUser')
 			password = property('dockerRepoPassword')
 		}
 	}
-*/
+}
 
 bootBuildImage {
-	imageName = 'indronilc/customer-service-registry:1.1'
-	publish = true
+		imageName = 'indronilc/customer-service-registry:1.0'
 
+	publish = true
 	docker{
 		publishRegistry {
 			username = project.property('dockerRepoUser')
 			password = project.property('dockerRepoPassword')
-
 		}
 	}
 }
 
 group = 'com.abc.customer'
-version = '0.0.1-SNAPSHOT'
+/* version = '0.0.1-SNAPSHOT' */
 
 java {
 	sourceCompatibility = '17'
